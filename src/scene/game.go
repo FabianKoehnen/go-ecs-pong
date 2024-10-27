@@ -30,10 +30,13 @@ func createWorld() donburi.World {
 func NewGameScene(screenWidth, screenHeight int) *GameScene {
 	world := createWorld()
 	archetype.NewPlayers(world, screenWidth, screenHeight)
+	archetype.NewBall(world, screenWidth, screenHeight)
 	return &GameScene{
 		world: world,
 		systems: []System{
 			system.NewPlayerMovement(),
+			system.NewVelocity(),
+			system.NewBounce(),
 		},
 		drawables: []Drawable{
 			system.NewRender(),

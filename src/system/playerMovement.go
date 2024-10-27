@@ -54,16 +54,18 @@ func (p *PlayerMovement) Update(w donburi.World, screenWidth, screenHeight int) 
 		if upPressed {
 			if position.Y-speed > 0 {
 				position.Y -= speed
-			} else {
-				position.Y = 0
+				return
 			}
+			position.Y = 0
+			return
 		}
 		if downPressed {
 			if position.Y+float64(playerImage.Bounds().Dy()) < float64(screenHeight) {
 				position.Y += speed
-			} else {
-				position.Y = float64(screenHeight - playerImage.Bounds().Dy())
+				return
 			}
+			position.Y = float64(screenHeight - playerImage.Bounds().Dy())
+			return
 		}
 	}
 }

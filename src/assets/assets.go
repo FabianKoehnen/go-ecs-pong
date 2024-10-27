@@ -12,3 +12,11 @@ func GetPaddleImage(sizeX, sizeY int) *ebiten.Image {
 
 	return img
 }
+
+func GetBallImage(size int) *ebiten.Image {
+	img := ebiten.NewImage(size, size)
+
+	img.Fill(color.White)
+
+	return img
+}
