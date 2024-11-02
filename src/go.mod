@@ -4,7 +4,9 @@ go 1.23
 
 require (
 	github.com/hajimehoshi/ebiten/v2 v2.8.1
+	github.com/solarlune/resolv v0.7.0
 	github.com/yohamta/donburi v1.15.4
+	golang.org/x/exp v0.0.0-20241009180824-f66d83c29e7c
 )
 
 require (

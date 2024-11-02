@@ -4,33 +4,37 @@ import (
 	"ecs-pong/assets"
 	"ecs-pong/component"
 	"ecs-pong/util"
+	"github.com/solarlune/resolv"
 	"github.com/yohamta/donburi"
 )
 
 const (
 	size = 20
 
-	velocityMax = 2
-	velocityMin = -2
+	velocityMax = 5
 )
 
-func NewBall(w donburi.World, screenSizeX, screenSizeY int) {
+func NewBall(w donburi.World, space *resolv.Space, screenSizeX, screenSizeY int) {
 	ball := w.Entry(w.Create(
 		component.Sprite,
-		component.Position,
+		component.CollisionObject,
 		component.Velocity,
-		component.Bouncing,
+		component.Bouncy,
 	))
 
 	img := assets.GetBallImage(size)
 	component.Sprite.Set(ball, &component.SpriteData{Image: img})
-	component.Position.Set(ball, &component.PositionData{
-		X: float64(screenSizeX/2 - img.Bounds().Dx()/2),
-		Y: float64((screenSizeY / 2) - img.Bounds().Dy()/2),
+	component.CollisionObject.Set(ball, component.CreateCollisionObjectData(
+		resolv.NewObject(
+			float64(screenSizeX/2-img.Bounds().Dx()/2),
+			float64((screenSizeY/2)-img.Bounds().Dy()/2),
+			float64(img.Bounds().Dx()),
+			float64(img.Bounds().Dy()),
+		),
+		space,
+	))
+	component.Velocity.Set(ball, &resolv.Vector{
+		X: util.RandomFloat(velocityMax, velocityMax),
+		Y: util.RandomFloat(velocityMax, velocityMax),
 	})
-	component.Velocity.Set(ball, &component.VelocityData{
-		X: util.RandomFloat(velocityMin, velocityMax),
-		Y: util.RandomFloat(velocityMin, velocityMax),
-	})
-	component.Bouncing.Set(ball, &component.BouncingData{})
 }

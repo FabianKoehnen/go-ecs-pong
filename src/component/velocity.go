@@ -1,11 +1,8 @@
 package component
 
 import (
+	"github.com/solarlune/resolv"
 	"github.com/yohamta/donburi"
 )
 
-type VelocityData struct {
-	X, Y float64
-}
-
-var Velocity = donburi.NewComponentType[VelocityData]()
+var Velocity = donburi.NewComponentType[resolv.Vector]()

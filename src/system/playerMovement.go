@@ -7,7 +7,7 @@ import (
 	"github.com/yohamta/donburi/filter"
 )
 
-const speed = 5
+const speed = 8
 
 type PlayerMovement struct {
 	query *donburi.Query
@@ -18,7 +18,7 @@ func NewPlayerMovement() *PlayerMovement {
 		query: donburi.NewQuery(
 			filter.Contains(
 				component.Player,
-				component.Position,
+				component.CollisionObject,
 				component.Sprite,
 			)),
 	}
@@ -48,23 +48,27 @@ func (p *PlayerMovement) Update(w donburi.World, screenWidth, screenHeight int) 
 			return
 		}
 
-		position := component.Position.Get(entry)
+		player := component.CollisionObject.Get(entry).Object
 		playerImage := component.Sprite.Get(entry).Image
 
 		if upPressed {
-			if position.Y-speed > 0 {
-				position.Y -= speed
+			if player.Position.Y-speed > 0 {
+				player.Position.Y -= speed
+				player.Update()
 				return
 			}
-			position.Y = 0
+			player.Position.Y = 0
+			player.Update()
 			return
 		}
 		if downPressed {
-			if position.Y+float64(playerImage.Bounds().Dy()) < float64(screenHeight) {
-				position.Y += speed
+			if player.Position.Y+float64(playerImage.Bounds().Dy()) < float64(screenHeight) {
+				player.Position.Y += speed
+				player.Update()
 				return
 			}
-			position.Y = float64(screenHeight - playerImage.Bounds().Dy())
+			player.Position.Y = float64(screenHeight - playerImage.Bounds().Dy())
+			player.Update()
 			return
 		}
 	}

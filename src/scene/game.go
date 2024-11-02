@@ -4,6 +4,7 @@ import (
 	"ecs-pong/archetype"
 	"ecs-pong/system"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/solarlune/resolv"
 	"github.com/yohamta/donburi"
 )
 
@@ -29,14 +30,15 @@ func createWorld() donburi.World {
 
 func NewGameScene(screenWidth, screenHeight int) *GameScene {
 	world := createWorld()
-	archetype.NewPlayers(world, screenWidth, screenHeight)
-	archetype.NewBall(world, screenWidth, screenHeight)
+	space := resolv.NewSpace(screenWidth, screenHeight, 1, 1)
+	archetype.NewPlayers(world, space, screenWidth, screenHeight)
+	archetype.NewBall(world, space, screenWidth, screenHeight)
 	return &GameScene{
 		world: world,
 		systems: []System{
 			system.NewPlayerMovement(),
 			system.NewVelocity(),
-			system.NewBounce(),
+			//system.NewBounce(),
 		},
 		drawables: []Drawable{
 			system.NewRender(),
@@ -45,8 +47,8 @@ func NewGameScene(screenWidth, screenHeight int) *GameScene {
 }
 
 func (t *GameScene) Update(screenWidth, screenHeight int) {
-	for _, system := range t.systems {
-		system.Update(t.world, screenWidth, screenHeight)
+	for _, systemItem := range t.systems {
+		systemItem.Update(t.world, screenWidth, screenHeight)
 	}
 }
 
@@ -56,23 +58,3 @@ func (t *GameScene) Draw(screen *ebiten.Image) {
 		s.Draw(t.world, screen)
 	}
 }
-
-//func (g *GameScene) Update(screenWidth, screenHeight int) {
-//
-//}
-//func (g *GameScene) Draw(screen *ebiten.Image) {
-//
-//}
-
-//func NewGame(players []system.ChosenPlayer, screenWidth int, screenHeight int) *GameScene {
-//	g := &GameScene{
-//		players:      players,
-//		level:        0,
-//		screenWidth:  screenWidth,
-//		screenHeight: screenHeight,
-//	}
-//
-//	g.loadLevel()
-//
-//	return g
-//}
