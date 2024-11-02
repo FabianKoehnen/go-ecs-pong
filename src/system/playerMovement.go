@@ -45,7 +45,7 @@ func (p *PlayerMovement) Update(w donburi.World, screenWidth, screenHeight int) 
 		}
 
 		if upPressed && downPressed {
-			return
+			continue
 		}
 
 		player := component.CollisionObject.Get(entry).Object
@@ -54,22 +54,18 @@ func (p *PlayerMovement) Update(w donburi.World, screenWidth, screenHeight int) 
 		if upPressed {
 			if player.Position.Y-speed > 0 {
 				player.Position.Y -= speed
-				player.Update()
-				return
+			} else {
+				player.Position.Y = 0
 			}
-			player.Position.Y = 0
-			player.Update()
-			return
 		}
 		if downPressed {
 			if player.Position.Y+float64(playerImage.Bounds().Dy()) < float64(screenHeight) {
 				player.Position.Y += speed
-				player.Update()
-				return
+			} else {
+				player.Position.Y = float64(screenHeight - playerImage.Bounds().Dy())
 			}
-			player.Position.Y = float64(screenHeight - playerImage.Bounds().Dy())
-			player.Update()
-			return
 		}
+
+		player.Update()
 	}
 }
